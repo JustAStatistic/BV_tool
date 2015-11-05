@@ -25,6 +25,7 @@ CREATE VIEW [bvt_prod].[UCLM_Drag_Forecast_VW]
 				left join (select [Forecast_DayDate], sum(forecast) as FV_Calls 
 								from [bvt_processed].[UCLM_Best_View_Forecast] 
 								where [Product_Code]='Call' and [load_dt]=(select max(load_dt) from [bvt_processed].[UCLM_Best_View_Forecast])
+								and Touch_Name <> 'DRAG'
 								group by Forecast_DayDate) as FV
 				on [Date]=Forecast_DayDate
 				where date>='2014-12-28') as Daily

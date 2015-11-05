@@ -36,7 +36,8 @@ sum(isnull([Telesales_WRLS Voice_CV], 0)) as [Telesales_WRLS Voice_CV],
 SUM(ISNULL([Telesales_Bolt Ons_CV], 0)) as [Telesales_Bolt Ons_CV],
 SUM(ISNULL([Telesales_Upgrades_CV], 0)) as [Telesales_Upgrades_CV],
 sum(isnull([Volume_CV],0)) as [Volume_CV],
-sum(isnull([Call_FV], 0)) as [Call_FV], 
+sum(isnull([Call_FV], 0)) as [Call_FV],
+sum(isnull([Churn_FV],0)) as [Churn_FV],
 sum(isnull([Online_FV], 0)) as [Online_FV], 
 sum(isnull([Online_sales_Access Line_FV], 0)) as [Online_sales_Access Line_FV], 
 sum(isnull([Online_sales_DSL_FV], 0)) as [Online_sales_DSL_FV], 
@@ -147,7 +148,7 @@ sum(isnull([Telesales_Access Line_AV], 0))+ sum(isnull([Telesales_DSL_AV], 0))+ 
 	FROM [bvt_prod].[UCLM_Best_View_VW]) as transform
 
 	pivot 
-	(SUM(Commitment) for CV_METRIC IN ([Call_CV], 
+	(SUM(Commitment) for CV_METRIC IN ([Call_CV],
 [Online_CV], 
 [Online_sales_Access Line_CV], 
 [Online_sales_DSL_CV], 
@@ -179,6 +180,7 @@ sum(isnull([Telesales_Access Line_AV], 0))+ sum(isnull([Telesales_DSL_AV], 0))+ 
 )) as P1
 
 	pivot(sum(forecast) for FV_Metric in ([Call_FV], 
+[Churn_FV],
 [Online_FV], 
 [Online_sales_Access Line_FV], 
 [Online_sales_DSL_FV], 

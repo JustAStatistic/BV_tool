@@ -9,6 +9,8 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+
+
 IF Object_ID('bvt_staging.UVLB_pID_FlightPlan_Clean') IS NOT NULL
 TRUNCATE TABLE bvt_staging.UVLB_pID_FlightPlan_Clean
 
@@ -272,7 +274,7 @@ LEFT JOIN (SELECT Distinct
        [idFlight_Plan_Records]
       ,idProgram_Touch_Definitions_TBL_FK 
       ,[InHome_Date]
-		FROM bvt_prod.UVLB_Best_View_Forecast_VW_FOR_LINK
+		FROM UVAQ.bvt_prod.UVLB_Best_View_Forecast_VW_FOR_LINK
 		where KPI_Type = 'Volume' And Forecast <> 0) c
 ON (a.idprogram_Touch_Definitions = c.idProgram_Touch_Definitions_TBL_FK  AND
 (c.InHome_Date BETWEEN Dateadd(D, -5,b.[In_Home_Date]) AND  Dateadd(D, 5, b.[In_Home_Date])))
@@ -304,7 +306,7 @@ LEFT JOIN (SELECT DISTINCT
       ,[Audience]
       ,[Creative_Name]
       ,[Offer]
-		FROM bvt_prod.UVLB_Best_View_Forecast_VW_FOR_LINK
+		FROM UVAQ.bvt_prod.UVLB_Best_View_Forecast_VW_FOR_LINK
 		where KPI_Type = 'Volume' And Forecast <> 0) d
 ON a.idFlight_Plan_Records = d.idFlight_Plan_Records
 Where b.In_home_date = d.InHome_Date
@@ -333,7 +335,7 @@ LEFT JOIN (SELECT DISTINCT
       ,[Audience]
       ,[Creative_Name]
       ,[Offer]
-		FROM bvt_prod.UVLB_Best_View_Forecast_VW_FOR_LINK
+		FROM UVAQ.bvt_prod.UVLB_Best_View_Forecast_VW_FOR_LINK
 		where KPI_Type = 'Volume' And Forecast <> 0) d
 ON a.idFlight_Plan_Records = d.idFlight_Plan_Records
 Where b.In_home_date <> d.InHome_Date and d.InHome_Date is not null
@@ -363,11 +365,11 @@ LEFT JOIN (SELECT DISTINCT
       ,[Audience]
       ,[Creative_Name]
       ,[Offer]
-		FROM bvt_prod.UVLB_Best_View_Forecast_VW_FOR_LINK
+		FROM UVAQ.bvt_prod.UVLB_Best_View_Forecast_VW_FOR_LINK
 		where KPI_Type = 'Volume' And Forecast <> 0) d
 ON a.idFlight_Plan_Records = d.idFlight_Plan_Records
-JOIN (select a.idProgram_Touch_Definitions_TBL, a.Touch_Name, b.Media from bvt_prod.Program_Touch_Definitions_TBL a
-		JOIN  bvt_prod.Media_LU_TBL b
+JOIN (select a.idProgram_Touch_Definitions_TBL, a.Touch_Name, b.Media from UVAQ.bvt_prod.Program_Touch_Definitions_TBL a
+		JOIN  UVAQ.bvt_prod.Media_LU_TBL b
 		ON a.idMedia_LU_TBL_FK = b.idMedia_LU_TBL) e
 on a.idProgram_Touch_Definitions = e.idProgram_Touch_Definitions_TBL
 Where d.InHome_Date is null
@@ -396,7 +398,7 @@ LEFT JOIN (SELECT DISTINCT
       ,[Audience]
       ,[Creative_Name]
       ,[Offer]
-		FROM bvt_prod.UVLB_Best_View_Forecast_VW_FOR_LINK
+		FROM UVAQ.bvt_prod.UVLB_Best_View_Forecast_VW_FOR_LINK
 		where KPI_Type = 'Volume' And Forecast <> 0) d
 ON a.idFlight_Plan_Records = d.idFlight_Plan_Records
 Where a.ParentID in (Select ParentID from #ParentID_ID_Link2 group by parentid having COUNT(ParentID) >1)

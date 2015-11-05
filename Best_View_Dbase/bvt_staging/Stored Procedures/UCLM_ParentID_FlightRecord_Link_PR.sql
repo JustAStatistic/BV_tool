@@ -1,8 +1,8 @@
---DROP PROC [bvt_staging].[UCLM_ParentID_FlightRecord_Link_PR]
+DROP PROC [bvt_staging].[UCLM_ParentID_FlightRecord_Link_PR]
 
---GO
+GO
 
-USE [UVAQ]
+USE [UVAQ_STAGING]
 GO
 
 /****** Object:  StoredProcedure [bvt_staging].[UCLM_ParentID_FlightRecord_Link_PR]    Script Date: 10/02/2015 11:40:56 ******/
@@ -66,7 +66,7 @@ Select ParentID,
 CASE 
 
 --Bill Media -- Bill Inserts
-/*still missing 206,207,209,210,217,224,226,239,567,573,630,631*/
+/*still missing 206,207,209,210,217,226,239,567,573,630,631*/
 
 WHEN Media_Code = 'BI' AND Campaign_Name LIKE '%HBO%' THEN 208 -- HBO BI 
 WHEN Media_Code = 'BI' AND Campaign_Name LIKE '%HD%' AND Campaign_Name NOT LIKE '%Premium%' THEN 211 -- HD BI
@@ -80,6 +80,7 @@ WHEN Media_Code = 'BI' AND Campaign_Name LIKE '%Movers%' AND Campaign_Name LIKE 
 WHEN Media_Code = 'BI' AND Campaign_Name LIKE '%myAT&T%' THEN 221 -- MyAT&T BI
 WHEN Media_Code = 'BI' AND Campaign_Name LIKE '%On%Demand%' AND Campaign_Name LIKE '%Reccom%' THEN 222 -- OnDemand Recos BI
 WHEN Media_Code = 'BI' AND Campaign_Name LIKE '%Parent%Control%' THEN 223 -- Parental Controls BI
+WHEN Media_Code = 'BI' AND Campaign_Name LIKE '%R4R%' THEN 224 --R$R BI
 WHEN Media_Code = 'BI' AND Campaign_Name LIKE '%Screen Pack%' THEN 225 -- Screen Pack BI
 WHEN Media_Code = 'BI' AND Campaign_Name LIKE '%TV Upgrade%' AND Campaign_Name LIKE '%U200%' THEN 227 -- IPTV Upgrade BI U200
 WHEN Media_Code = 'BI' AND Campaign_Name LIKE '%TV Upgrade%' AND Campaign_Name LIKE '%U300%' THEN 228 -- IPTV Upgrade BI U300
@@ -155,16 +156,13 @@ WHEN Media_Code = 'FYI' AND eCRW_Project_Name LIKE '%Onsert%' AND eCRW_Project_N
 
 WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%Benefit%' AND eCRW_Project_Name NOT LIKE '%Hispanic%'THEN 362 --Benefits Self Mailer DM 
 WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%EOY Letter%' THEN 365 --EOY Letter Letter Kit DM
---WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%Giga%Announcement_1%' THEN 367 --Announcement 1 Self Mailer DM
---WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%Giga%Announcement_2%' THEN 368 --Announcement 2 Self Mailer DM
 WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%HBO_Upgrade%' AND (Campaign_Name LIKE '%GC%' OR Campaign_Name LIKE '%Greeting Card%') THEN 369 --HBO Greeting Card DM
 WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%HBO_Upgrage%' AND (Campaign_Name LIKE '%SP%' OR Campaign_Name LIKE '%Poster%') THEN 370 -- HBO SP DM
 WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%HBO_Upgrade%' AND (Campaign_Name LIKE '%PC%' OR Campaign_Name LIKE '%Postcard%' OR Campaign_Name LIKE '%Post Card%') THEN 371 --HBO Post Card DM
 WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%HSIA_Upgrade%' AND Campaign_Name NOT LIKE '%Non-HSIA%' AND Campaign_Name NOT LIKE '%Cross%Sell%' THEN 372 --HSIA Letter Kit DM
---WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%GigaPower%' AND eCRW_Project_Name NOT LIKE '%Low%'THEN 373 --Gigapower Monthly Self Mailer HP DM
 WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%Movers%' THEN 374 --Movers Post Card DM
 WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%MovieTime%' THEN 375 --MovieTime Self Mailer DM
-WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%HSIA_Upgrade%' AND (Campaign_Name LIKE '%Non-HSIA%' OR Campaign_Name LIKE '%Cross%Sell%') THEN 376 --Non-HSIA Letter Kit DM
+WHEN Media_Code = 'DM' AND (eCRW_Project_Name LIKE '%HSIA_Upgrade%' OR eCRW_Project_Name LIKE '%HSIA_STAR%') AND (Campaign_Name LIKE '%Non-HSIA%' OR Campaign_Name LIKE '%Cross%Sell%' OR Campaign_Name LIKE '%x-sell%') THEN 376 --HSIA Upsell Letter Kit DM
 WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%Programming%' THEN 377 --Programming Self Mailer DM
 WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%Reaffirm_Stream%' THEN 379 --Reaffirm Stream Letter Kit DM
 WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%TVUpgrade%' AND (Campaign_Name LIKE '%SM%' OR Campaign_Name LIKE '%SelfMailer%' OR Campaign_Name LIKE '%Self Mailer%' OR [In_Home_Date] = '11-12-14') THEN 381 --IPTV Self Mailer DM
@@ -174,16 +172,13 @@ WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%Big_Data%' THEN 411 --Big Da
 WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%Benefit%' and eCRW_Project_Name LIKE '%Hispanic%' THEN 412 --Hispanic Benefits Self Mailer DM
 WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%Seniors%' THEN 414 --Seniors Self Mailer DM
 WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%Appreciation%' THEN 571 --Member Appreciation DM
---WHEN Media_Code = 'DM' AND eCRW_Project_Name LIKE '%GigaPower%' AND eCRW_Project_Name LIKE '%Low%'THEN 598 --Gigapower Monthly Self Mailer HP DM
 
 
 --EMail
-/*still missing 385,415,552,557,560,600,601*/
+/*still missing 385,415,552,557,560,601*/
 
 WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%Benefit%' AND eCRW_Project_Name NOT LIKE '%HSIA%' THEN 383 --Benefits EM
-WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%Engagement_Stream%' THEN 384 --Engagement Stream EM
---WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%Giga%Announcement_1%' THEN 386 --Announcement 1 EM
---WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%Giga%Announcement_2%' THEN 387 --Announcement 2 EM
+WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%Engagement_Stream%' AND eCRW_Project_Name NOT LIKE '%Weekly%' THEN 384 --Engagement Stream EM
 WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%Groundhog%' THEN 388 --Groundhof's Day EM
 WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%HBO%' AND (Campaign_Name LIKE '%Follow%Up%' OR Campaign_Name LIKE '%FU%') THEN 390 --HBO Follow Up EM
 WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%HBO%' AND Campaign_Name LIKE '%Initial%' THEN 391 --HBO Initial EM
@@ -192,7 +187,6 @@ WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%Benefit%' AND eCRW_Project_N
 WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%HSIA%Only%' AND eCRW_Project_Name LIKE '%Welcome%' THEN 393 --HSIA Only Welcome EM
 WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%HSIA_Upgrade%' AND Campaign_Name NOT LIKE '%Non-HSIA%' AND Campaign_Name NOT LIKE '%Cross%Sell%' THEN 394 --HSIA Upgrade/Cross Sell EM
 WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%MDU_Movers%' THEN 395 --MDU Movers EM 
---WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%GigaPower%' AND eCRW_Project_Name NOT LIKE '%LOW%' THEN 396 --Gigapower Monthly HP EM
 WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%Movers%' THEN 397 -- Movers EM
 WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%Movie%Time%' THEN 398 --Movie Time EM
 WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%HSIA_Upgrade%' AND (Campaign_Name LIKE '%Non-HSIA%' OR Campaign_Name LIKE '%Cross%Sell%') THEN 399 --Non-HSIA EM
@@ -213,9 +207,10 @@ WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%Skin%' AND (eCRW_Project_Nam
 WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%TV_Upgrade%' AND Campaign_Name  LIKE '%Initial%' THEN 588 --IPTV Upgrade Initial EM
 WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%TV_Upgrade%' AND Campaign_Name LIKE '%Follow%Up%' THEN 589 --IPTV Upgrade Follow Up EM
 WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%VOICE%' THEN 595 --Voice Cross Sell EM
-WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%Epix_12%' THEN 599 --Free Epix Upgrade Announcement EM 
---WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%GigaPower%' AND eCRW_Project_Name LIKE '%LOW%' THEN 597 --Gigapower Monthly lP EM
+WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%Epix_12%' THEN 599 --Free Epix Upgrade Announcement EM
+WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%Epix_Reminder%' THEN 600 --Free Epix Upgrade Reminder EM
 WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%Movie%Time%3%' THEN 602 --Movie Time 3 EM
+WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%Engagement%Weekly%' THEN 695 -- Engagement Stream Weekly EM
 WHEN Media_Code = 'EM' AND eCRW_Project_Name LIKE '%NFL%' THEN 696 --NFL Sunday Ticket EM
 
 
@@ -241,7 +236,7 @@ LEFT JOIN (SELECT Distinct
        [idFlight_Plan_Records]
       ,idProgram_Touch_Definitions_TBL_FK 
       ,[InHome_Date]
-		FROM bvt_prod.UCLM_Best_View_Forecast_VW_FOR_LINK
+		FROM UVAQ.bvt_prod.UCLM_Best_View_Forecast_VW_FOR_LINK
 		where KPI_Type = 'Volume' --And Forecast <> 0
 		) c
 ON (a.idprogram_Touch_Definitions = c.idProgram_Touch_Definitions_TBL_FK  AND
@@ -272,7 +267,7 @@ LEFT JOIN (SELECT DISTINCT
       ,[Audience]
       ,[Creative_Name]
       ,[Offer]
-		FROM bvt_prod.UCLM_Best_View_Forecast_VW_FOR_LINK
+		FROM UVAQ.bvt_prod.UCLM_Best_View_Forecast_VW_FOR_LINK
 		where KPI_Type = 'Volume'--And Forecast <> 0
 		) d
 ON a.idFlight_Plan_Records = d.idFlight_Plan_Records
@@ -302,7 +297,7 @@ LEFT JOIN (SELECT DISTINCT
       ,[Audience]
       ,[Creative_Name]
       ,[Offer]
-		FROM bvt_prod.UCLM_Best_View_Forecast_VW_FOR_LINK
+		FROM UVAQ.bvt_prod.UCLM_Best_View_Forecast_VW_FOR_LINK
 		where KPI_Type = 'Volume'-- And Forecast <> 0
 		) d
 ON a.idFlight_Plan_Records = d.idFlight_Plan_Records
@@ -332,12 +327,12 @@ LEFT JOIN (SELECT DISTINCT
       ,[Audience]
       ,[Creative_Name]
       ,[Offer]
-		FROM bvt_prod.UCLM_Best_View_Forecast_VW_FOR_LINK
+		FROM UVAQ.bvt_prod.UCLM_Best_View_Forecast_VW_FOR_LINK
 		where KPI_Type = 'Volume' --And Forecast <> 0
 		) d
 ON a.idFlight_Plan_Records = d.idFlight_Plan_Records
-JOIN (select a.idProgram_Touch_Definitions_TBL, a.Touch_Name, b.Media from bvt_prod.Program_Touch_Definitions_TBL a
-		JOIN  bvt_prod.Media_LU_TBL b
+JOIN (select a.idProgram_Touch_Definitions_TBL, a.Touch_Name, b.Media from UVAQ.bvt_prod.Program_Touch_Definitions_TBL a
+		JOIN  UVAQ.bvt_prod.Media_LU_TBL b
 		ON a.idMedia_LU_TBL_FK = b.idMedia_LU_TBL) e
 on a.idProgram_Touch_Definitions = e.idProgram_Touch_Definitions_TBL
 Where d.InHome_Date is null
@@ -367,7 +362,7 @@ LEFT JOIN (SELECT DISTINCT
       ,[Audience]
       ,[Creative_Name]
       ,[Offer]
-		FROM bvt_prod.UCLM_Best_View_Forecast_VW_FOR_LINK
+		FROM UVAQ.bvt_prod.UCLM_Best_View_Forecast_VW_FOR_LINK
 		where KPI_Type = 'Volume' --And Forecast <> 0
 		) d
 ON a.idFlight_Plan_Records = d.idFlight_Plan_Records

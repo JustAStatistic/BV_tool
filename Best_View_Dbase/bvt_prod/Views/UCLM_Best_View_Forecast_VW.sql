@@ -1,8 +1,16 @@
-﻿drop view [bvt_prod].[UCLM_Best_View_Forecast_VW]
-go
+USE [UVAQ]
+GO
+
+/****** Object:  View [bvt_prod].[UCLM_Best_View_Forecast_VW]    Script Date: 10/14/2015 14:48:49 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
 
 
-CREATE view [bvt_prod].[UCLM_Best_View_Forecast_VW]
+
+ALTER view [bvt_prod].[UCLM_Best_View_Forecast_VW]
 as
 select FPR.idFlight_Plan_Records
 	, FPR.Campaign_Name
@@ -49,11 +57,7 @@ from bvt_prod.UCLM_FlightplanSalesForecast
 		on UCLM_FlightplanSalesForecast.idProduct_LU_TBL_FK=Product_LU_TBL.idProduct_LU_TBL
   where idkpi_types_FK<>3)
 
-<<<<<<< HEAD
 union all
-=======
-union ALL
->>>>>>> 9cd6a257d7a1a430772d67e752500dd3fca71dfe
 
 (select idFlight_Plan_Records
 	, 'Response' as KPI_Type
@@ -64,18 +68,44 @@ from bvt_prod.UCLM_FlightplanKPIForecast
  left join bvt_prod.KPI_Types
 		on UCLM_FlightplanKPIForecast.idkpi_types_FK=KPI_Types.idKPI_Types)
 		
-<<<<<<< HEAD
 union all
-=======
-union ALL
->>>>>>> 9cd6a257d7a1a430772d67e752500dd3fca71dfe
 
 (select idFlight_Plan_Records
 	, 'Volume' as KPI_Type
 	, 'Volume' as Product_Code
 	, inhome_date as Forecast_DayDate
 	, Volume as Forecast
-from bvt_prod.UCLM_Flightplan_Volume_Forecast_VW)) as metricsa) as metrics
+from bvt_prod.UCLM_Flightplan_Volume_Forecast_VW)
+
+union all
+
+(select idFlight_Plan_Records
+	, 'Response' as KPI_Type
+	, 'Call' as Product_Code
+	, Date as Forecast_DayDate
+	, Drag_Calls as Forecast
+from bvt_prod.UCLM_Drag_Forecast_VW 
+JOIN (Select idFlight_Plan_Records, Case when DATEPART(d,InHome_Date) = 1 and DATEPART(M,InHome_Date) = 1 then DATEPART(YYYY, Inhome_Date)
+	Else DATEPART(YYYY, Inhome_date)+1 END as MediaYear
+	from bvt_processed.UCLM_Flight_Plan a
+	where idProgram_Touch_Definitions_TBL_FK = 800) medyear
+on UCLM_Drag_Forecast_VW.Media_Year = medyear.MediaYear)
+
+union all
+
+(select idFlight_Plan_Records
+	, 'Telesales' as KPI_Type
+	, Product_Code
+	, Date as Forecast_DayDate
+	, Drag_Sales as Forecast
+from bvt_prod.UCLM_Drag_Sales_Forecast_VW 
+JOIN (Select idFlight_Plan_Records, Case when DATEPART(d,InHome_Date) = 1 and DATEPART(M,InHome_Date) = 1 then DATEPART(YYYY, Inhome_Date)
+	Else DATEPART(YYYY, Inhome_date)+1 END as MediaYear
+	from bvt_processed.UCLM_Flight_Plan a
+	where idProgram_Touch_Definitions_TBL_FK = 800) medyear
+on UCLM_Drag_Sales_Forecast_VW.Media_Year = medyear.MediaYear)
+
+) as metricsa) as metrics
 	on fpr.idFlight_Plan_Records=metrics.idFlight_Plan_Records
 -----------------------------------------------------------------	
 --Media Calendar Information-------------------------------------
@@ -98,5 +128,9 @@ left join
 		on FPR.idProgram_Touch_Definitions_TBL_FK=idProgram_Touch_Definitions_TBL
 
 where Tactic <> 'Cost'	
+
+
+
+GO
 
 
